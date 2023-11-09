@@ -72,11 +72,21 @@
                 <!-- <input type="text" class="form-control"> -->
               </div>
               <div class="row mt-3">
-                <div class="col-md-3">
-                  <label for="password">Password*</label>
+                <div class="col-10">
+                  <label for="password">Password</label>
+                  <input required id="password" type="text" class="form-control" />
                 </div>
-                <div class="col-md-9">
-                  <input type="text" class="form-control" />
+              </div>
+              <div class="row mt-3">
+                <div class="col-10">
+                  <label for="phone">Phone No.</label>
+                  <input required id="phone" type="text" class="form-control" max="10" />
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-6">
+                  <label for="address">Address</label>
+                  <input required id="address" class="form-control" rows="3" cols="50"/>
                 </div>
               </div>
               <div class="row mt-3">
@@ -97,13 +107,13 @@
         </div>
       </div>
     </div>
-    <footer class="container-fluid">
+    <!--<footer class="container-fluid">
       <div class="row bg-dark text-light p-2 text-center">
         <div class="col-12">
           <span class="font-small"> &copy;Created by suraj aswal </span>
         </div>
       </div>
-    </footer>
+    </footer>-->
     <script src="jquery.js"></script>
     <script>
       $(document).ready(function () {
