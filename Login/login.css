@@ -3,12 +3,15 @@
     padding:0px;
 }
 .form-wrap{
+    
     display: flex;
     height: 100vh;
     justify-content: center;
     align-items: center;
 }
 .container{
+    
+    position:absolute;
     width:600px;
     height:700px;
     /* background: red; */
