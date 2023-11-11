@@ -1,9 +1,10 @@
 *{
+    
     margin:0px;
     padding:0px;
 }
 .form-wrap{
-    
+    background-image: url(FoodShare/Login/360_F_284468940_1bg6BwgOfjCnE3W0wkMVMVqddJgtMynE.jpg);
     display: flex;
     height: 100vh;
     justify-content: center;
@@ -14,7 +15,7 @@
     position:absolute;
     width:600px;
     height:700px;
-    /* background: red; */
+    /* background: red;  */
     /* border: 1px solid #000; */
 }
 .btn-block{

@@ -1,0 +1,78 @@
+/* body {
+    padding-top: 20%;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5; 
+    margin: 0;
+    padding: 0;
+    background-image: url('FoodShare/Login/360_F_284468940_1bg6BwgOfjCnE3W0wkMVMVqddJgtMynE.jpg');
+} */
+
+body {
+    background-image: url('360_F_284468940_1bg6BwgOfjCnE3W0wkMVMVqddJgtMynE.jpg');
+    background-size: cover;
+    background-position: center;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.form{
+    padding-top: 20%;  
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    /* background-image: url('360_F_284468940_1bg6BwgOfjCnE3W0wkMVMVqddJgtMynE.jpg'); */
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.about-section {
+    padding-top: 20%;
+    text-align: center;
+    padding: 40px;
+}
+
+.about-section h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+.about-section p {
+    font-size: 18px;
+    /* background-image: url('360_F_284468940_1bg6BwgOfjCnE3W0wkMVMVqddJgtMynE.jpg'); */
+    color: #777;
+    margin: 20px 0;
+}
+
+.team-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.team-member {
+    width: 300px;
+    margin: 20px;
+    text-align: center;
+}
+
+.team-member img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.team-member h2 {
+    font-size: 24px;
+    color: #333;
+    margin: 10px 0;
+}
+
+.team-member p {
+    font-size: 16px;
+    color: #777;
+}
