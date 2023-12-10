@@ -3,16 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <link rel="stylesheet" type="text/css" href="assets/css/login.css">
-=======
-    <link rel="stylesheet" type="text/css" href="static/css/login.css">
->>>>>>> f2c050cf1fd6f723fb7e9dedcc4a43cff816b855
-=======
-    <link rel="stylesheet" type="text/css" href="static/css/login.css">
->>>>>>> f2c050cf1fd6f723fb7e9dedcc4a43cff816b855
-    
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <link rel="stylesheet" type="text/css" href="../static/assets/css/login.css">
     <title>Login/Register</title>
     
     
@@ -28,10 +22,14 @@
                     <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div> -->
-                <span>or use your email for registration</span>
-                <input type="text" placeholder="Name" />
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
+                <!-- <span>or use your email for registration</span> -->
+                <input type="text" placeholder="Name" required/>
+                <input type="email" placeholder="Email" required />
+                <input type="password" placeholder="Password" required />
+                <input type="number" placeholder="Phone No." required/>
+                <input type="text" placeholder="Address" required />
+                <input type="text" placeholder="Manager" required/>
+
                 <button>Sign Up</button>
             </form>
         </div>
@@ -43,10 +41,10 @@
                     <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                 </div> -->
-                <span>or use your account</span>
-                <input type="email" placeholder="Email" />
-                <input type="password" placeholder="Password" />
-                <a href="#">Forgot your password?</a>
+                <!-- <span>or use your account</span> -->
+                <input type="email" placeholder="Email" required/>
+                <input type="password" placeholder="Password" required/>
+                <!-- <a href="#">Forgot your password?</a> -->
                 <button>Sign In</button>
             </form>
         </div>
@@ -65,6 +63,6 @@
             </div>
         </div>
     </div>
-    <script src="static/js/login.js"></script>
+    <script src="../static/assets/js/login.js"></script>
 </body>
 </html>
