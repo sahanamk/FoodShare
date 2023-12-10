@@ -1,6 +1,9 @@
 from flask import Flask, redirect, render_template, url_for
 <<<<<<< HEAD
+<<<<<<< HEAD
 from flask_sqlalchemy import SQLAlchemy
+=======
+>>>>>>> f2c050cf1fd6f723fb7e9dedcc4a43cff816b855
 =======
 >>>>>>> f2c050cf1fd6f723fb7e9dedcc4a43cff816b855
 
@@ -8,6 +11,7 @@ local_server=True
 app = Flask(__name__)
 app.secret_key="sahanasaanvi"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #app.config['SQLALCHEMY_DATABASE_URI'] =  'mysql://username:password@localhost/databasename'
 app.config['SQLALCHEMY_DATABASE_URI'] =  'mysql://root:@localhost/foodshare'
@@ -25,10 +29,13 @@ class Hotel(db.Model):
 
 =======
 >>>>>>> f2c050cf1fd6f723fb7e9dedcc4a43cff816b855
+=======
+>>>>>>> f2c050cf1fd6f723fb7e9dedcc4a43cff816b855
 @app.route("/")
 def login():
     return render_template("login.html")
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 @app.route("/test")
 def test():
@@ -41,6 +48,8 @@ def test():
 
 
 
+=======
+>>>>>>> f2c050cf1fd6f723fb7e9dedcc4a43cff816b855
 =======
 >>>>>>> f2c050cf1fd6f723fb7e9dedcc4a43cff816b855
 app.run(debug=True)
