@@ -1,29 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+    <link rel="stylesheet" href="../static/assets/css/home.css" />
 
-    <link rel="stylesheet" type="text/css" href="../static/assets/css/contact.css">
+    <link rel="stylesheet" href="../static/assets/css/contact.css" />
     <title>Contact Us</title>
-    
-    
-</head>
-<body>
-    
-    <div class="container" id="container">
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <a class="logo" href="../templates/restHome.html"
+          >FoodShare<span>.</span></a
+        >
+        <ul class="menu-links">
+          <span id="close-menu-btn" class="material-symbols-outlined"
+            >close</span
+          >
+          <li><a href="../templates/restHome.html">Home</a></li>
+          <li><a href="#">About us</a></li>
+          <li><a href="../templates/contact.html">Contact us</a></li>
+          <li><a href="#">Profile</a></li>
+        </ul>
+        <span id="hamburger-btn" class="material-symbols-outlined">menu</span>
+      </nav>
+    </header>
+    <section class="hero-section">
+      <div class="container" id="container">
         <div class="form-container contact-us-container">
-            <form action="#">
-                <h1>Contact Us</h1>
-                <input type="text" placeholder="Name" required/>
-                <input type="email" placeholder="Email" required/>
-                <input type="number" placeholder="Phone No." required/>
-                <textarea placeholder="Message"></textarea>
-                <button>Submit</button>
-            </form>
+          <form action="#">
+            <h1>Contact Us</h1>
+            <input type="text" placeholder="Name" required />
+            <input type="email" placeholder="Email" required />
+            <input type="number" placeholder="Phone No." required />
+            <textarea placeholder="Message"></textarea>
+            <button>Submit</button>
+          </form>
         </div>
-    </div>
-</body>
+      </div>
+    </section>
+  </body>
 </html>
