@@ -22,9 +22,29 @@ class Hotel(db.Model):
 
 
 
-@app.route("/")
-def login():
+@app.route("/restLogin")
+def restlogin():
     return render_template("restLogin.html") 
+
+@app.route("/charLogin")
+def charlogin():
+    return render_template("charLogin.html")
+
+@app.route("/restHome")
+def restHome():
+    return render_template("restHome.html")
+
+@app.route("/charHome")
+def charHome():
+    return render_template("charHome.html")
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+@app.route("/foodDonate")
+def contact():
+    return render_template("foodDonate.html")
 
 @app.route("/test")
 def test():
