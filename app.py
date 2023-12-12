@@ -92,9 +92,9 @@ def restsignup():
         address=request.form.get('address')
         manager=request.form.get('manager')
 
-        emailUser=hotel.query.filter_by(email=email).first()
-        if emailUser:
-            flash("Email is already taken","warning")
+        user=hotel.query.filter_by(email=email).first()
+        if user:
+            #flash("Email is already taken","warning")
             return render_template("restLogin.html")
 
         #print(hotelID,name,email,passwd,phone,address,manager)
@@ -111,7 +111,9 @@ def restsignup():
         db.session.add(new_hotel)
         db.session.commit()
 
-        flash("SignUp Success","success")
+        #login_user(user)
+
+        #flash("SignUp Success","success")
         return render_template("restHome.html")
     return render_template("restLogin.html")
 
@@ -124,11 +126,11 @@ def restsignin():
         user=hotel.query.filter_by(email=email, passwd=passwd).first()
 
         if user:
-            login_user(user.hotelID)
-            flash("Login Success","info")
+            #login_user(user)
+            #flash("Login Success","info")
             return render_template("restHome.html")
         else:
-            flash("Invalid Credentials","danger")
+            #flash("Invalid Credentials","danger")
             return render_template('restLogin.html')
     return render_template('restLogin.html')
     
@@ -141,17 +143,17 @@ def charsignup():
         name=request.form.get('name')
         email=request.form.get('email')
         passwd=request.form.get('passwd')
-        phone=request.form.get('phone')
+        phone=str(request.form.get('phone'))
         address=request.form.get('address')
         manager=request.form.get('manager')
-        
+
         emailUser=charity.query.filter_by(email=email).first()
         if emailUser:
-            flash("Email is already taken","warning")
+            #flash("Email is already taken","warning")
             return render_template("restLogin.html")
-        
+
         #print(charityID,name,email,passwd,phone,address,manager)
-        new_charity= charity(
+        new_charity = charity(
             charityID=charityID,
             name=name,
             email=email,
@@ -164,6 +166,9 @@ def charsignup():
         db.session.add(new_charity)
         db.session.commit()
 
+        remove_expired_food()
+
+        #flash("SignUp Success","success")
         return render_template("charHome.html")
     return render_template("charLogin.html")
 
@@ -176,13 +181,24 @@ def charsignin():
         user=charity.query.filter_by(email=email, passwd=passwd).first()
 
         if user:
-            login_user(user.charityID)
-            flash("Login Success","info")
+            remove_expired_food()
+            #login_user(user)
+            #flash("Login Success","info")
             return render_template("charHome.html")
         else:
-            flash("Invalid Credentials","danger")
-            return render_template('charLogin.html', error="Invalid email or password")
+            #flash("Invalid Credentials","danger")
+            return render_template('charLogin.html')
     return render_template('charLogin.html')
+
+    
+def remove_expired_food():
+    current_date = datetime.now()
+    expired_food = food.query.filter(food.expiry == current_date).all()
+
+    for item in expired_food:
+        db.session.delete(item)
+    db.session.commit()
+
 
 
 
@@ -219,9 +235,13 @@ def foodDonate():
 
 
 
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
+@app.route("/charContact")
+def charContact():
+    return render_template("charContact.html")
+
+@app.route("/restContact")
+def restContact():
+    return render_template("restContact.html")
 
 @app.route("/about")
 def about():
@@ -250,15 +270,15 @@ def charProfile():
 
 
 @app.route('/charLogout')
+#@login_required
 def charLogout():
     logout_user()
-    flash("Logout SuccessFul","warning")
     return render_template("charLogin.html")
 
 @app.route('/restLogout')
+#@login_required
 def restLogout():
     logout_user()
-    flash("Logout SuccessFul","warning")
     return render_template("restLogin.html")
 
 
