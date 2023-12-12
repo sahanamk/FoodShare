@@ -71,6 +71,11 @@ textarea, input {
 	width: 768px;
 	max-width: 100%;
 	min-height: 480px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: auto;
+
 }
 
 .form-container {
@@ -79,9 +84,5 @@ textarea, input {
 	height: 100%;
 }
 
-.contact-us-container {
-	left: 0;
-	width: 50%;
-	z-index: 2;
-}
+
 
