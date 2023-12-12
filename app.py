@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, url_for,request,flash
+from flask import Flask, redirect, render_template, url_for,request,flash,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_required,logout_user,login_user,login_manager,LoginManager,current_user
@@ -233,6 +233,48 @@ def foodDonate():
         return render_template("foodDonate.html")
     return render_template("foodDonate.html")
 
+@app.route("/foodAccept")
+def foodAccept():
+    foods = food.query.all()
+    return render_template('foodAccept.html', foods=foods)
+
+@app.route("/api/new_food_items")
+def get_new_food_items():
+    new_food_items = food.query.all() 
+
+    new_food_items_list = [
+        {
+            "name": food.name,
+            "type": food.type,
+            "qty": food.qty,
+            "description": food.description,
+            "foodID": food.foodID
+        }
+        for food in new_food_items
+    ]
+
+    return jsonify(new_food_items_list)
+
+@app.route("/order",methods=['POST','GET'])
+def order():
+    if request.method == 'POST':
+        food_id = request.form['food_id']
+        quantity = int(request.form['quantity'])
+        food_item = food.query.get(food_id)
+        if food_item.qty-quantity>=0:
+            food_item.qty -= quantity
+
+            if food_item.qty == 0:
+                #delete_food=food.query.filter_by(foodID=food_id).all()
+                db.session.delete(food_item)
+
+            db.session.commit()
+            #flash("Order placed successfully!", "success")
+            return render_template("foodAccept.html")
+        else:
+            #flash("Insufficient quantity available!", "warning")
+            return render_template("foodAccept.html")
+    #return "Invalid request method"
 
 
 @app.route("/charContact")

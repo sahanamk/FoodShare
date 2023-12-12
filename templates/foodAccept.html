@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodShare</title>
+    <link rel="stylesheet" href="../static/assets/css/foodAccept.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <a class="logo" href="#">FoodShare<span>.</span></a>
+        <ul class="menu-links">
+          <span id="close-menu-btn" class="material-symbols-outlined">close</span>
+          <li><a href="/charHome">Home</a></li>
+          <li><a href="/about">About us</a></li>
+          <li><a href="/charContact">Contact us</a></li>
+          <li><a href="/charProfile">Profile</a></li>
+        </ul>
+        <span id="hamburger-btn" class="material-symbols-outlined">menu</span>
+      </nav>
+    </header>
+    <section class="hero-section">
+      
+      <div class="container">
+        <div class="food-items">
+            {% for food in foods %}
+            <div class="food-item">
+                <h2>{{ food.name }}</h2>
+                <p>Type: {{ food.type }}</p>
+                <p>Available Quantity: {{ food.qty }}</p>
+                <p>Description: {{ food.description }}</p>
+                <form action="/order" method="post">
+                    <input type="hidden" name="food_id" value="{{ food.foodID }}">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" min="1" max="{{ food.qty }}">
+                    <input type="submit" value="Order">
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+      function fetchAndAppendNewFoodItems() {
+          fetch("/api/new_food_items")  // Endpoint to fetch new food items
+              .then(response => response.json())
+              .then(data => {
+                  const foodItemsContainer = document.getElementById("foodItemsContainer");
+                  data.forEach(food => {
+                      const newFoodItem = document.createElement("div");
+                      newFoodItem.classList.add("food-item");
+                      newFoodItem.innerHTML = `
+                          <h2>${food.name}</h2>
+                          <p>Type: ${food.type}</p>
+                          <p>Available Quantity: ${food.qty}</p>
+                          <p>Description: ${food.description}</p>
+                          <form action="/order" method="post">
+                              <input type="hidden" name="food_id" value="${food.foodID}">
+                              <label for="quantity">Quantity:</label>
+                              <input type="number" id="quantity" name="quantity" min="1" max="${food.qty}">
+                              <input type="submit" value="Order">
+                          </form>
+                      `;
+                      foodItemsContainer.appendChild(newFoodItem);
+                  });
+              })
+              .catch(error => console.error("Error fetching new food items:", error));
+      }
+  
+      // Call the function to fetch and append new food items when needed
+      fetchAndAppendNewFoodItems();
+  </script>
+        
+     
+    </section>
+    <script src="../static/assets/js/home.js"></script>
+  </body>
+</html>
