@@ -7,12 +7,14 @@
     <meta content="" name="keywords">
 
     <link rel="stylesheet" type="text/css" href="../static/assets/css/login.css">
-    <title>Login/Register</title>
+    <title>Charity - Login/Register</title>
     
     
 </head>
 <body>
-    
+    <div class="overlay-panel welcome">
+        <h1>Welcome, Charity!</h1>
+    </div>
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form action="/charsignup" method="post">
@@ -29,10 +31,10 @@
                 <input type="number" min="1000000000" max="9999999999" placeholder="Phone No." name="phone" required/>
                 <input type="text" placeholder="Address" name="address" required />
                 <input type="text" placeholder="Manager" name="manager" required/>
-
                 <button>Sign Up</button>
             </form>
         </div>
+
         <div class="form-container sign-in-container">
             <form action="/charsignin" method="post">
                 <h1>Sign in</h1>
@@ -44,10 +46,10 @@
                 <!-- <span>or use your account</span> -->
                 <input type="email" placeholder="Email" name="email" required/>
                 <input type="password" placeholder="Password" name="passwd" required/>
-                <!-- <a href="#">Forgot your password?</a> -->
                 <button>Sign In</button>
             </form>
         </div>
+
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
@@ -55,6 +57,7 @@
                     <p>To keep connected with us please login with your personal info</p>
                     <button class="ghost" id="signIn">Sign In</button>
                 </div>
+
                 <div class="overlay-panel overlay-right">
                     <h1>Hello, Friend!</h1>
                     <p>Enter your personal details and start journey with us</p>
@@ -63,6 +66,7 @@
             </div>
         </div>
     </div>
+    
     <script src="../static/assets/js/login.js"></script>
 </body>
 </html>

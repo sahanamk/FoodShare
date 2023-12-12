@@ -1,31 +1,33 @@
-from flask import Flask, redirect, render_template, url_for,request
+from flask import Flask, redirect, render_template, url_for,request,flash
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_required,logout_user,login_user,login_manager,LoginManager,current_user
-import uuid
-from werkzeug.security import generate_password_hash,check_password_hash
+import uuid,json
+from datetime import datetime
+
 
 local_server=True
 app = Flask(__name__)
 app.secret_key="sahanasaanvi"
 
+
+
 login_manager=LoginManager(app)
 login_manager.login_view='login'
+
+
 
 #app.config['SQLALCHEMY_DATABASE_URI'] =  'mysql://username:password@localhost/databasename'
 app.config['SQLALCHEMY_DATABASE_URI'] =  'mysql://root:@localhost/foodshare'
 db=SQLAlchemy(app)
 
+
+
 @login_manager.user_loader
 def load_user(user_id):
-    hotel_user = hotel.query.get(user_id)
-    if hotel_user:
-        return hotel_user
-    
-    charity_user = charity.query.get(user_id)
-    if charity_user:
-        return charity_user
-    
-    return None
+    return hotel.query.get(user_id) or charity.query.get(user_id)
+
+
 
 class hotel(db.Model):
     hotelID=db.Column(db.String(8),primary_key=True)
@@ -63,9 +65,21 @@ class accept(db.Model):
     charityID=db.Column(db.String(8),primary_key=True)
 
 
+
+
 @app.route("/")
-def login():
+def index():
+    return render_template("index.html")
+
+@app.route("/restLogin")
+def restLogin():
     return render_template("restLogin.html")
+
+@app.route("/charLogin")
+def charLogin():
+    return render_template("charLogin.html")
+
+
 
 @app.route("/restsignup", methods=['POST','GET'])
 def restsignup():
@@ -78,7 +92,12 @@ def restsignup():
         address=request.form.get('address')
         manager=request.form.get('manager')
 
-        print(hotelID,name,email,passwd,phone,address,manager)
+        emailUser=hotel.query.filter_by(email=email).first()
+        if emailUser:
+            flash("Email is already taken","warning")
+            return render_template("restLogin.html")
+
+        #print(hotelID,name,email,passwd,phone,address,manager)
         new_hotel = hotel(
             hotelID=hotelID,
             name=name,
@@ -92,6 +111,7 @@ def restsignup():
         db.session.add(new_hotel)
         db.session.commit()
 
+        flash("SignUp Success","success")
         return render_template("restHome.html")
     return render_template("restLogin.html")
 
@@ -100,9 +120,19 @@ def restsignin():
     if request.method == 'POST':
         email=request.form.get('email')
         passwd=request.form.get('passwd')
-        print(email,passwd)
-        return render_template("restHome.html")
+
+        user=hotel.query.filter_by(email=email, passwd=passwd).first()
+
+        if user:
+            login_user(user.hotelID)
+            flash("Login Success","info")
+            return render_template("restHome.html")
+        else:
+            flash("Invalid Credentials","danger")
+            return render_template('restLogin.html')
+    return render_template('restLogin.html')
     
+
 
 @app.route("/charsignup", methods=['POST','GET'])
 def charsignup():
@@ -114,8 +144,13 @@ def charsignup():
         phone=request.form.get('phone')
         address=request.form.get('address')
         manager=request.form.get('manager')
-        print(charityID,name,email,passwd,phone,address,manager)
         
+        emailUser=charity.query.filter_by(email=email).first()
+        if emailUser:
+            flash("Email is already taken","warning")
+            return render_template("restLogin.html")
+        
+        #print(charityID,name,email,passwd,phone,address,manager)
         new_charity= charity(
             charityID=charityID,
             name=name,
@@ -137,18 +172,52 @@ def charsignin():
     if request.method == 'POST':
         email=request.form.get('email')
         passwd=request.form.get('passwd')
-        print(email,passwd)
-        return render_template("charHome.html")
+
+        user=charity.query.filter_by(email=email, passwd=passwd).first()
+
+        if user:
+            login_user(user.charityID)
+            flash("Login Success","info")
+            return render_template("charHome.html")
+        else:
+            flash("Invalid Credentials","danger")
+            return render_template('charLogin.html', error="Invalid email or password")
+    return render_template('charLogin.html')
 
 
 
-@app.route("/restHome")
-def restHome():
-    return render_template("restHome.html")
+@app.route("/foodDonate", methods=['POST','GET'])
+def foodDonate():
+    if request.method == 'POST':
+        foodID = str(uuid.uuid4())[:8]
+        name=request.form.get('name')
+        qty=request.form.get('qty')
+        type=request.form.get('type')
 
-@app.route("/charHome")
-def charHome():
-    return render_template("charHome.html")
+        current_date = datetime.now()
+        date = current_date.strftime("%d/%m/%y")
+
+        expiry=request.form.get('expiry')
+        description=request.form.get('description')
+        print(name,qty,type,date,expiry,description)
+
+        new_food = food(
+            foodID=foodID,
+            name=name,
+            qty=qty,
+            type=type,
+            date=date,
+            expiry=expiry,
+            description=description,
+        )
+        
+        db.session.add(new_food)
+        db.session.commit()
+
+        return render_template("foodDonate.html")
+    return render_template("foodDonate.html")
+
+
 
 @app.route("/contact")
 def contact():
@@ -158,26 +227,39 @@ def contact():
 def about():
     return render_template("about.html")
 
+
+
+@app.route("/restHome")
+def restHome():
+    return render_template("restHome.html")
+
 @app.route("/restProfile")
 def restProfile():
     return render_template("restProfile.html")
+
+
+
+@app.route("/charHome")
+def charHome():
+    return render_template("charHome.html")
 
 @app.route("/charProfile")
 def charProfile():
     return render_template("charProfile.html")
 
-@app.route("/foodDonate")
-def foodDonate():
-    return render_template("foodDonate.html")
 
-@app.route("/test")
-def test():
-    try:
-        a=Hotel.query.all()
-        print(a)
-        return "database connected"
-    except Exception as e:
-        return f"database not connected {e}"
+
+@app.route('/charLogout')
+def charLogout():
+    logout_user()
+    flash("Logout SuccessFul","warning")
+    return render_template("charLogin.html")
+
+@app.route('/restLogout')
+def restLogout():
+    logout_user()
+    flash("Logout SuccessFul","warning")
+    return render_template("restLogin.html")
 
 
 app.run(debug=True)
