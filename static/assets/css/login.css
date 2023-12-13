@@ -97,6 +97,7 @@ textarea, input {
 	overflow: hidden;
 	width: 768px;
 	max-width: 100%;
+	margin-top: 7%;
 	min-height: 480px;
 }
 

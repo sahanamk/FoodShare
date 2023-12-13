@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     overflow: hidden;
     background-color: #f4f4f4;
   }
@@ -20,13 +22,13 @@ body {
   }
 
   #left {
-    background-color: #FF7F50; /* Adjust color */
+	  background: linear-gradient( #FF4B2B, #FF416C); /* Adjust color */
     color: #fff;
     transform: scale(1);
   }
 
   #right {
-    background-color: #00CED1; /* Adjust color */
+	  background: linear-gradient( #FF4B2B, #FF416C);  /* Adjust color */
     color: #fff;
     transform: scale(1);
   }
@@ -36,7 +38,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #3498db;
+    background-color: #fff;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -47,7 +49,7 @@ body {
   }
 
   .centerButton:hover {
-    background-color: #2980b9; /* Adjust hover color */
+    background-color: #708090; /* Adjust hover color */
   }
 
   img {
@@ -56,9 +58,8 @@ body {
     object-fit: cover;
   }
 
-  .commonText {
-    color: #333; /* Change text color */
-    padding: 10px;
-    text-align: center;
-    font-size: 36px;
+  h1{
+    margin-top: 150px ;
   }
+
+  

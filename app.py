@@ -1,9 +1,12 @@
-from flask import Flask, redirect, render_template, url_for,request,flash,jsonify
+from flask import Flask, redirect, render_template, url_for,request,flash,jsonify,session
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship, backref
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_required,logout_user,login_user,login_manager,LoginManager,current_user
 import uuid,json
 from datetime import datetime
+
+
 
 
 local_server=True
@@ -37,6 +40,7 @@ class hotel(db.Model):
     phone=db.Column(db.String(10))
     address=db.Column(db.String(100))
     manager=db.Column(db.String(20))
+    food_relation = db.relationship('food', backref='hotel')
 
 class charity(db.Model):
     charityID=db.Column(db.String(8),primary_key=True)
@@ -49,20 +53,25 @@ class charity(db.Model):
 
 class food(db.Model):
     foodID=db.Column(db.String(8),primary_key=True)
+    hotelID = db.Column(db.Integer, db.ForeignKey('hotel.hotelID'))
+    # hotelID=db.Column(db.String(8), db.ForeignKey('Hotel.hotelID'))
+    # Hotel=db.relationship("hotel",backref=backref('Hotel', uselist=False))
     name=db.Column(db.String(20))
     qty=db.Column(db.Integer)
     type=db.Column(db.String(7))
     date=db.Column(db.Date)
     expiry=db.Column(db.Date)
     description=db.Column(db.String(50))
-    
-class donate(db.Model):
-    foodID=db.Column(db.String(8),primary_key=True)
-    hotelID=db.Column(db.String(8),primary_key=True)
+
 
 class accept(db.Model):
-    foodID=db.Column(db.String(8),primary_key=True)
-    charityID=db.Column(db.String(8),primary_key=True)
+    acceptID = db.Column(db.Integer, primary_key=True)
+    charityID = db.Column(db.String(8), db.ForeignKey('charity.charityID'))
+    foodID = db.Column(db.String(8), db.ForeignKey('food.foodID'))
+    
+    charity = db.relationship('charity', backref='accept')
+    food = db.relationship('food', backref='accept')
+        
 
 
 
@@ -71,11 +80,11 @@ class accept(db.Model):
 def index():
     return render_template("index.html")
 
-@app.route("/restLogin")
+@app.route("/restLogin",methods=['POST','GET'])
 def restLogin():
     return render_template("restLogin.html")
 
-@app.route("/charLogin")
+@app.route("/charLogin",methods=['POST','GET'])
 def charLogin():
     return render_template("charLogin.html")
 
@@ -94,6 +103,7 @@ def restsignup():
 
         user=hotel.query.filter_by(email=email).first()
         if user:
+            session['hotelID'] = user.hotelID
             #flash("Email is already taken","warning")
             return render_template("restLogin.html")
 
@@ -126,6 +136,7 @@ def restsignin():
         user=hotel.query.filter_by(email=email, passwd=passwd).first()
 
         if user:
+            session['hotelID'] = user.hotelID
             #login_user(user)
             #flash("Login Success","info")
             return render_template("restHome.html")
@@ -151,7 +162,7 @@ def charsignup():
         if emailUser:
             #flash("Email is already taken","warning")
             return render_template("restLogin.html")
-
+        session['charityID'] = emailUser.charityID
         #print(charityID,name,email,passwd,phone,address,manager)
         new_charity = charity(
             charityID=charityID,
@@ -182,7 +193,7 @@ def charsignin():
 
         if user:
             remove_expired_food()
-            #login_user(user)
+            session['charityID'] = user.charityID
             #flash("Login Success","info")
             return render_template("charHome.html")
         else:
@@ -205,6 +216,7 @@ def remove_expired_food():
 @app.route("/foodDonate", methods=['POST','GET'])
 def foodDonate():
     if request.method == 'POST':
+        hotelID = session.get('hotelID')
         foodID = str(uuid.uuid4())[:8]
         name=request.form.get('name')
         qty=request.form.get('qty')
@@ -215,16 +227,17 @@ def foodDonate():
 
         expiry=request.form.get('expiry')
         description=request.form.get('description')
-        print(name,qty,type,date,expiry,description)
+        #print(name,qty,type,date,expiry,description)
 
         new_food = food(
             foodID=foodID,
+            hotelID=hotelID,
             name=name,
             qty=qty,
             type=type,
             date=date,
             expiry=expiry,
-            description=description,
+            description=description
         )
         
         db.session.add(new_food)
@@ -235,8 +248,8 @@ def foodDonate():
 
 @app.route("/foodAccept")
 def foodAccept():
-    foods = food.query.all()
-    return render_template('foodAccept.html', foods=foods)
+    food_query = food.query.all()
+    return render_template('foodAccept.html', foods=food_query)
 
 @app.route("/api/new_food_items")
 def get_new_food_items():
@@ -262,6 +275,16 @@ def order():
         quantity = int(request.form['quantity'])
         food_item = food.query.get(food_id)
         if food_item.qty-quantity>=0:
+            acceptID = str(uuid.uuid4())[:8]
+            charityID = session.get('charityID')
+            new_accept = accept(
+                acceptID=acceptID,
+                foodID=food_id,
+                charityID=charityID
+            )
+            db.session.add(new_accept)
+            db.session.commit()
+
             food_item.qty -= quantity
 
             if food_item.qty == 0:
@@ -270,10 +293,12 @@ def order():
 
             db.session.commit()
             #flash("Order placed successfully!", "success")
-            return render_template("foodAccept.html")
+            food_query = food.query.all()
+            return render_template('foodAccept.html', foods=food_query)
         else:
             #flash("Insufficient quantity available!", "warning")
-            return render_template("foodAccept.html")
+            food_query = food.query.all()
+            return render_template('foodAccept.html', foods=food_query)
     #return "Invalid request method"
 
 
@@ -315,13 +340,13 @@ def charProfile():
 #@login_required
 def charLogout():
     logout_user()
-    return render_template("charLogin.html")
+    return render_template("index.html")
 
 @app.route('/restLogout')
 #@login_required
 def restLogout():
     logout_user()
-    return render_template("restLogin.html")
+    return render_template("index.html")
 
 
 app.run(debug=True)
